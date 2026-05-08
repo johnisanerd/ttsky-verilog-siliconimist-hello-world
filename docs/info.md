@@ -9,12 +9,14 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+This is a simple 7-segment display counter.  It counts from 0 to 9, and then wraps back to 0. 
+If the reset is pressed, the counter is reset to 0.  This is our first project, ever.  
+We are learning as we go, and documenting as we go on https://siliconimist.com
 
 ## How to test
 
-Explain how to use your project
+We hope you can just plug this into the TT demo board and it will work.
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+The project uses a 7-segment display on the TT demo board.

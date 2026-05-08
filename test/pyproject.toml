@@ -1,7 +1,7 @@
 [project]
-name = "test"
+name = "test_the_siliconimist_chip1"
 version = "0.1.0"
-description = "Add your description here"
+description = "Test rig for the Siliconimist Chip1"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

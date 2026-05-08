@@ -27,8 +27,9 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // Replace tt_um_example with your module name:
-  tt_um_example user_project (
+  // CLK_DIV overridden to 10 for fast simulation (10 cycles = 1 "second").
+  // In hardware CLK_DIV defaults to 50_000_000 (50 MHz → 1 Hz).
+  tt_um_the_siliconimist_chip1 #(.CLK_DIV(10)) user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST

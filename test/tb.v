@@ -27,9 +27,15 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // CLK_DIV overridden to 10 for fast simulation (10 cycles = 1 "second").
-  // In hardware CLK_DIV defaults to 50_000_000 (50 MHz → 1 Hz).
+  // CLK_DIV is a parameter on the RTL module so simulations can run fast.
+  // In gate-level (synthesized) mode the parameter no longer exists —
+  // it has been baked into the netlist at synthesis time — so the
+  // override is only applied for RTL simulation.
+`ifdef GL_TEST
+  tt_um_the_siliconimist_chip1 user_project (
+`else
   tt_um_the_siliconimist_chip1 #(.CLK_DIV(10)) user_project (
+`endif
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST

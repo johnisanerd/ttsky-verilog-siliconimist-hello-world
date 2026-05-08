@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 """Cocotb tests for the one-digit 7-segment seconds counter.
 
-The DUT in tb.v overrides CLK_DIV from 50_000_000 to 10, so each
-simulated "second" takes 10 clock cycles. The simulation runs in
-nanoseconds rather than seconds.
+In RTL simulation, tb.v overrides CLK_DIV from 50_000_000 to 10 so each
+simulated "second" takes 10 clock cycles. In gate-level simulation the
+parameter has been baked into the synthesized netlist and cannot be
+overridden, so the slow tests are skipped (waiting 50M cycles per tick
+would take many minutes per test).
 
 Timing note:
     Cocotb's ClockCycles trigger fires on the rising edge BEFORE the
@@ -13,9 +15,15 @@ Timing note:
     so that the read lands one cycle after the register has updated.
 """
 
+import os
+
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
+
+# True when running against the synthesized gate-level netlist. Set by
+# `make GATES=yes`; the Makefile exports the variable for us.
+GATES: bool = os.environ.get("GATES") == "yes"
 
 # Number of clock cycles per simulated "second". Must match the override
 # of the CLK_DIV parameter in tb.v.
@@ -64,9 +72,13 @@ async def test_reset_shows_zero(dut: cocotb.handle.HierarchyObject) -> None:
     )
 
 
-@cocotb.test()
+# cocotb.test() # is the default test, so we can skip it if GATES is True
+@cocotb.test(skip=GATES)
 async def test_counts_0_to_9(dut: cocotb.handle.HierarchyObject) -> None:
-    """The display must advance one digit per simulated second, 0 → 9."""
+    """The display must advance one digit per simulated second, 0 → 9.
+
+    Skipped in gate-level mode because CLK_DIV is fixed at 50_000_000.
+    """
     await start_and_reset(dut)
 
     for expected_digit in range(1, 10):
@@ -78,9 +90,12 @@ async def test_counts_0_to_9(dut: cocotb.handle.HierarchyObject) -> None:
         )
 
 
-@cocotb.test()
+@cocotb.test(skip=GATES)
 async def test_wraps_9_to_0(dut: cocotb.handle.HierarchyObject) -> None:
-    """After 10 ticks, the digit must wrap from 9 back to 0."""
+    """After 10 ticks, the digit must wrap from 9 back to 0.
+
+    Skipped in gate-level mode because CLK_DIV is fixed at 50_000_000.
+    """
     await start_and_reset(dut)
 
     await ClockCycles(dut.clk, CLK_DIV * 10 + 1)
@@ -90,9 +105,12 @@ async def test_wraps_9_to_0(dut: cocotb.handle.HierarchyObject) -> None:
     )
 
 
-@cocotb.test()
+@cocotb.test(skip=GATES)
 async def test_reset_mid_count(dut: cocotb.handle.HierarchyObject) -> None:
-    """Asserting reset mid-count must immediately return the digit to 0."""
+    """Asserting reset mid-count must immediately return the digit to 0.
+
+    Skipped in gate-level mode because CLK_DIV is fixed at 50_000_000.
+    """
     await start_and_reset(dut)
 
     # Advance to digit 4 by waiting four "seconds".
@@ -116,12 +134,14 @@ async def test_reset_mid_count(dut: cocotb.handle.HierarchyObject) -> None:
     )
 
 
-@cocotb.test()
+@cocotb.test(skip=GATES)
 async def test_segment_encoding(dut: cocotb.handle.HierarchyObject) -> None:
     """Each digit 0–9 must produce the correct 7-segment pattern.
 
     Catches lookup-table bugs: a counter could pass test_counts_0_to_9
     while still showing the wrong glyph if a single bit in SEG is wrong.
+
+    Skipped in gate-level mode because CLK_DIV is fixed at 50_000_000.
     """
     await start_and_reset(dut)
 

@@ -31,11 +31,11 @@ VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
 
 endif
 
-# Override CLK_DIV for fast simulation (10 cycles per tick instead of 50M)
-COMPILE_ARGS    += -PCLK_DIV=10
-
 # Allow sharing configuration between design and testbench via `include`:
 COMPILE_ARGS 		+= -I$(SRC_DIR)
+
+# Export GATES so test.py can detect gate-level mode and skip slow tests.
+export GATES
 
 # Include the testbench sources:
 VERILOG_SOURCES += $(PWD)/tb.v

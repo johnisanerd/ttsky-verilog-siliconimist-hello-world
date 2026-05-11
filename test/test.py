@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 """Cocotb tests for the one-digit 7-segment seconds counter.
 
+These are the tests for the Siliconimist Chip1 project.  It is a simple one-digit 7-segment display counter.
+It counts from 0 to 9, and then wraps back to 0.  If the reset is pressed, the counter is reset to 0.
+This is our first silicon design project, ever (in Verilog, at least).
+We are learning as we go, and documenting as we go on https://siliconimist.com
+
 In RTL simulation, tb.v overrides CLK_DIV from 50_000_000 to 10 so each
 simulated "second" takes 10 clock cycles. In gate-level simulation the
 parameter has been baked into the synthesized netlist and cannot be

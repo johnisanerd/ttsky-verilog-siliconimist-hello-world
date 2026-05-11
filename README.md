@@ -1,42 +1,22 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# Tiny Tapeout Verilog Project Template
+# Siliconimist Chip1
 
-- [Read the documentation for project](docs/info.md)
+**Siliconimist Chip1** is our "hello world" of silicon: a one-digit 7-segment
+seconds counter, built in Verilog and headed to a Tiny Tapeout shuttle.
 
-## What is Tiny Tapeout?
+I am  [The Siliconimist](https://siliconimist.com) - John Cole, learning how to design real chips out loud. The plan is simple: start from absolutely nothing, build the smallest interesting thing that can fit on a 1×1 Tiny Tapeout tile, get it manufactured, and write up everything we trip over along the way. We have no prior silicon experience, no special hardware, and no shortcuts - just the [Tiny Tapeout](https://tinytapeout.com) toolchain, a lot of curiosity, and a blog at [siliconimist.com](https://siliconimist.com) where we are documenting the journey lesson by lesson.
 
-Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
+The chip itself does exactly one thing, and it does it once per second. A 50 MHz clock from the TT demo board gets divided down to a 1 Hz tick, a 4-bit counter advances 0 to 9 (and wraps back to 0) on every tick, and a combinational decoder turns the current digit into the seven segment-control bits that light up the display on the demo board. The reset button on the demo board snaps the counter back to 0. That's it. No inputs, no bidirectional pins, no clever tricks - just a digit that counts up. For the details on how it works and how to test it, see [docs/info.md](docs/info.md); for how to run the simulation locally, see [test/README.md](test/README.md).
 
-To learn more and get started, visit https://tinytapeout.com.
+Our journey started where most beginners start: in [Wokwi](https://wokwi.com/), wiring up the counter as a logic-level prototype to convince ourselves the idea was sound. From there we ported the design to Verilog, set up a [cocotb](https://docs.cocotb.org/en/stable/) testbench, and overrided the clock divider so a "second" of simulated time only takes 10 clock cycles. We then ran into the kind of small but real obstacle that every first project has - getting GTKWave to behave on Apple Silicon turned out to be more pain than it was worth, so we switched to [Surfer](https://surfer-project.org/) for waveform viewing and never looked back. 
 
-## Set up your Verilog project
-
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
-
-The GitHub action will automatically build the ASIC files using [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/).
-
-## Enable GitHub actions to build the results page
-
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
-
-## Resources
-
-- [FAQ](https://tinytapeout.com/faq/)
-- [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
-- [Join the community](https://tinytapeout.com/discord)
-- [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
+Each of those steps, from Wokwi prototype to working RTL to picking a waveform viewer, is written up on [siliconimist.com](https://siliconimist.com).  I would say this is so the next person learning this has a slightly easier time than we did, but the documentation to get started is so good and the community is so helpful, I'll be honest, I'm not going to improve it.  At the end of the day, we wrote it up for your amusement, not really to learn anything.  
 
 ## What next?
 
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
-  - Bluesky [@tinytapeout.com](https://bsky.app/profile/tinytapeout.com)
+Now we wait.  The shuttle will take a few months, so all we have are hopes, prayers, and the smart engineers at Tiny Tapeout to make it work.  Thoughts and prayers to the team at Tiny Tapeout and Skyworks to make it work.
+
+Let's see if it works.
+
+[![Siliconimist Chip1](./docs/TheSiliconimist.png)](https://siliconimist.com)
